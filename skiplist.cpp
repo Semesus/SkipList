@@ -95,7 +95,22 @@ SkipList::~SkipList() {
   // need to delete individual nodes
 }
 
-bool SkipList::remove(int data) { return true; }
+bool SkipList::remove(int data) {
+    SNode* curr = frontGuards_[0];
+    while(curr->value_ != data) {
+        if(curr->next_->value_ == INT_MAX) {
+            break;
+        } else if(curr->next_->value_ == data) {
+            SNode* temp = curr->next_;
+            curr->next_->next_->prev_ = curr;
+            curr->next_ = curr->next_->next_;
+            delete temp;
+            break;
+        }
+        curr = curr->next_;
+    }
+    return true;
+}
 
 
 

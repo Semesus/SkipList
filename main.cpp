@@ -16,6 +16,8 @@ void test() {
     cout << skp << endl;
     skp.add(10);
     cout << skp << endl;
+    skp.remove(6);
+    cout << skp << endl;
 }
 
 void test1() {
