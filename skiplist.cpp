@@ -68,6 +68,20 @@ SkipList::SkipList(int maxLevel, int probability)
     // link guards to dummy nodes
     frontGuards_[0] = front;
     rearGuards_[0] = back;
+    // create levels up to maxLevel
+    for(int i = 1; i < maxLevel; i++) {
+        front = new SNode(INT_MIN);
+        back = new SNode(INT_MAX);
+        front->next_ = back;
+        back->prev_ = front;
+        frontGuards_[i] = front;
+        rearGuards_[i] = back;
+        // link up/down pointers
+        front->down_ = frontGuards_[i - 1];
+        frontGuards_[i - 1]->up_ = front;
+        back->down_ = rearGuards_[i - 1];
+        rearGuards_[i - 1]->up_ = back;
+    }
 }
 
 bool SkipList::shouldInsertAtHigher() const {

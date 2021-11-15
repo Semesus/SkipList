@@ -9,7 +9,7 @@ void test() {
     // setting seed for easy testing
     srand(10000);
     cout << boolalpha;
-    SkipList skp(1, 80);
+    SkipList skp(4, 80);
     cout << skp << endl;
     skp.add(6);
     cout << skp << endl;
