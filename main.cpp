@@ -5,6 +5,19 @@
 
 using namespace std;
 
+void test() {
+    // setting seed for easy testing
+    srand(10000);
+    SkipList skp(1, 80);
+    cout << skp << endl;
+    skp.add(6);
+    cout << skp << endl;
+    skp.add(3);
+    cout << skp << endl;
+    skp.add(10);
+    cout << skp << endl;
+}
+
 void test1() {
   // setting seed for easy testing
   srand(10000);
@@ -12,9 +25,9 @@ void test1() {
   cout << boolalpha;
   skp.add(3);
   skp.add(5);
-  skp.add(vector<int>{1, 7, 9});
+  //skp.add(vector<int>{1, 7, 9});
   // cannot add existing
-  assert(!skp.add(vector<int>{1, 7}));
+  //assert(!skp.add(vector<int>{1, 7}));
   cout << skp << endl;
   cout << "7 ? " << skp.contains(7) << endl;
   cout << "3 ? " << skp.contains(3) << endl;
@@ -28,8 +41,8 @@ void test1() {
 }
 
 int main() {
-
-  test1();
+    test();
+  //test1();
 
   cout << "Done." << endl;
   return 0;

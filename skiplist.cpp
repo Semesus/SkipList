@@ -16,7 +16,7 @@ ostream &operator<<(ostream &out, const SkipList &skip) {
     SNode* curr = skip.frontGuards_[i];
     while(curr != nullptr) {
       out<< to_string(curr->value_) + ", ";
-      curr = curr->forward_;
+      curr = curr->next_;
     }
     out << "\n";
   }
@@ -43,7 +43,7 @@ ostream &operator<<(ostream &out, const SkipList &skip) {
   return out;
 }
 */
-SNode::SNode(int value) : value_{value}, forward_{nullptr}, backward_{nullptr},
+SNode::SNode(int value) : value_{value}, next_{nullptr}, prev_{nullptr},
     up_{nullptr}, down_{nullptr} {}
 
 // how many forward/backward pointers it has
@@ -62,9 +62,9 @@ SkipList::SkipList(int maxLevel, int probability)
     auto* front = new SNode(INT_MIN);
     auto* back = new SNode(INT_MAX);
     // link front node to back node
-    front->forward_ = back;
+    front->next_ = back;
     // link back node to front
-    back->backward_ = front;
+    back->prev_ = front;
     // link guards to dummy nodes
     frontGuards_[0] = front;
     rearGuards_[0] = back;
@@ -77,6 +77,17 @@ bool SkipList::shouldInsertAtHigher() const {
 //bool SkipList::add(const vector<int> &values) { return true; }
 
 bool SkipList::add(int value) {
+    // pointer to beginning of list
+    SNode* curr = frontGuards_[0]->next_;
+    // create new node to insert
+    SNode* newNode = new SNode(value);
+    // iterate thru list until greater value found
+    while(curr->value_ < value) {
+        curr = curr->next_;
+    }
+    // Add node into list
+    addBefore(newNode, curr);
+
     return true;
 }
 
@@ -89,15 +100,15 @@ bool SkipList::remove(int data) { return true; }
 
 
 // Given a SNode, place it before the given NextNode
-void SkipList::addBefore(SNode *newNode, SNode *nextNode) {
+void SkipList::addBefore(SNode* newNode, SNode* nextNode) {
   // Link next to node in front
-  newNode->forward_ = nextNode;
+  newNode->next_ = nextNode;
   // Link prev to node behind
-  newNode->backward_ = nextNode->forward_;
+  newNode->prev_ = nextNode->prev_;
   // Link node in back to new node
-  nextNode->backward_->forward_ = newNode;
+  nextNode->prev_->next_ = newNode;
   // Link node in front to new node
-  nextNode->backward_ = newNode;
+  nextNode->prev_ = newNode;
 }
 
 // get the node that would be before this data
@@ -111,7 +122,7 @@ void SkipList::addBefore(SNode *newNode, SNode *nextNode) {
 // Returns the NODE if the value exists in the SkipList.
 // Returns nullptr otherwise
 
-SNode* SkipList::containsSNode(int data) const { return nullptr; }
+//SNode* SkipList::containsSNode(int data) const { return nullptr; }
 
 // Checks to see whether or not a data value exists in the list
 // Returns true if the value exists in the SkipList.

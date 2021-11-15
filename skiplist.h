@@ -42,10 +42,10 @@ private:
   int value_{0};
 
   // link to Next SNode 
-  SNode* forward_;
+  SNode* next_;
 
   // link to Prev SNode
-  SNode* backward_;
+  SNode* prev_;
    
   //link to up node 
   SNode* up_;
@@ -79,10 +79,10 @@ private:
   //SNode *tail_;
 
     // array of Depth SNode* objects as FrontGuards linking levels
-    SNode **frontGuards_;
+    SNode** frontGuards_;
 
     // array of Depth SNode* objects as RearGuards linking levels
-    SNode **rearGuards_;
+    SNode** rearGuards_;
 
   // given a SNode, place it before the given nextNode
   void addBefore(SNode *newNode, SNode *nextNode);
