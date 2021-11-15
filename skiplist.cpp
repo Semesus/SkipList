@@ -23,26 +23,6 @@ ostream &operator<<(ostream &out, const SkipList &skip) {
   return out;
 }
 
-/*
-
-
-ostream &operator<<(ostream &out, const SkipList &skip) {
-  for (int d = skip.maxLevel - 1; d >= 0; d--) {
-    out << d << ": ";
-    auto *curr = skip.head->forward[d];
-    if (curr != skip.tail) {
-      out << curr->value;
-      curr = curr->forward[d];
-    }
-    while (curr != nullptr && curr != skip.tail) {
-      out << "-->" << curr->value;
-      curr = curr->forward[d];
-    }
-    out << endl;
-  }
-  return out;
-}
-*/
 SNode::SNode(int value) : value_{value}, next_{nullptr}, prev_{nullptr},
     up_{nullptr}, down_{nullptr} {}
 
@@ -84,6 +64,10 @@ SkipList::SkipList(int maxLevel, int probability)
     }
 }
 
+SkipList::~SkipList() {
+    // need to delete individual nodes
+}
+
 bool SkipList::shouldInsertAtHigher() const {
   return rand() % 100 < probability_;
 }
@@ -91,6 +75,10 @@ bool SkipList::shouldInsertAtHigher() const {
 //bool SkipList::add(const vector<int> &values) { return true; }
 
 bool SkipList::add(int value) {
+    // check if value already in list
+    if(contains(value)) {
+        return false;
+    }
     // pointer to beginning of list
     SNode* curr = frontGuards_[0]->next_;
     // create new node to insert
@@ -101,11 +89,26 @@ bool SkipList::add(int value) {
     }
     // Add node into list
     addBefore(newNode, curr);
+    // check if to be added to higher level
+    bool levelUp = shouldInsertAtHigher();
+    int currLevel = 1;
+    while(levelUp && currLevel < maxLevel_ - 1) {
+        // continue checking levelUp
+        if(levelUp) {
+            curr = frontGuards_[currLevel]->next_;
+            while(curr->value_ < value) {
+                curr = curr->next_;
+            }
+            SNode* levelUpNode = new SNode(value);
+            addBefore(levelUpNode, curr);
+            // link up/down pointers
+            newNode->up_ = levelUpNode;
+            levelUpNode->down_ = newNode;
+            currLevel++;
+            levelUp = shouldInsertAtHigher();
+        }
+    }
     return true;
-}
-
-SkipList::~SkipList() {
-  // need to delete individual nodes
 }
 
 bool SkipList::remove(int data) {

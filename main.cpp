@@ -9,19 +9,19 @@ void test() {
     // setting seed for easy testing
     srand(10000);
     cout << boolalpha;
-    SkipList skp(4, 80);
+    SkipList skp(4, 90);
     cout << skp << endl;
     skp.add(6);
     cout << skp << endl;
     skp.add(3);
     cout << skp << endl;
     skp.add(10);
-    cout << "6 ? " << skp.contains(6) << endl;
+    //cout << "6 ? " << skp.contains(6) << endl;
     cout << skp << endl;
-    skp.remove(6);
+    //skp.remove(6);
     cout << skp << endl;
-    cout << "3 ? " << skp.contains(3) << endl;
-    cout << "6 ? " << skp.contains(6) << endl;
+    //cout << "3 ? " << skp.contains(3) << endl;
+    //cout << "6 ? " << skp.contains(6) << endl;
     bool result;
 }
 
