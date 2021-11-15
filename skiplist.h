@@ -39,19 +39,19 @@ private:
   explicit SNode(int value);
 
   // data contained in the object
-  int value{0};
+  int value_{0};
 
   // link to Next SNode 
-  SNode * forward;
+  SNode* forward_;
 
   // link to Prev SNode
-  SNode * backward;
+  SNode* backward_;
    
   //link to up node 
-  SNode * up;
+  SNode* up_;
 
   // link to down SNode
-  SNode * down;
+  SNode* down_;
 
   // how many forward/backward pointers it has
   int height() const;
@@ -66,17 +66,23 @@ class SkipList {
 
 private:
   // maximum number of levels
-  int maxLevel = 1;
+  int maxLevel_ = 1;
 
   // probability of inserting at a higher level
   // as an integer between 0% and 100% (exclusive)
-  int probability = 0;
+  int probability_ = 0;
 
   // head of linked levels
-  SNode *head;
+  //SNode *head_;
 
   // tail of linked levels
-  SNode *tail;
+  //SNode *tail_;
+
+    // array of Depth SNode* objects as FrontGuards linking levels
+    SNode **frontGuards_;
+
+    // array of Depth SNode* objects as RearGuards linking levels
+    SNode **rearGuards_;
 
   // given a SNode, place it before the given nextNode
   void addBefore(SNode *newNode, SNode *nextNode);
@@ -86,10 +92,10 @@ private:
   bool shouldInsertAtHigher() const;
 
   // connect 2 nodes in a line
-  static void connect2AtLevel(SNode *a, SNode *b, int level);
+  //static void connect2AtLevel(SNode *a, SNode *b, int level);
 
   // connect 3 nodes in a line
-  static void connect3AtLevel(SNode *a, SNode *b, SNode *c, int level);
+  //static void connect3AtLevel(SNode *a, SNode *b, SNode *c, int level);
 
   SNode *containsSNode(int data) const;
 
@@ -118,7 +124,7 @@ public:
   bool add(int value);
 
   // return true if successfully added, no duplicates
-  bool add(const vector<int> &values);
+ // bool add(const vector<int> &values);
 
   // return true if successfully removed
   bool remove(int data);
