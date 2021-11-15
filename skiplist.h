@@ -85,7 +85,7 @@ private:
     SNode** rearGuards_;
 
   // given a SNode, place it before the given nextNode
-  void addBefore(SNode *newNode, SNode *nextNode);
+  static void addBefore(SNode *newNode, SNode *nextNode);
 
   // return true p% of time,
   // for p = 50, each node has a 50% chance of being at higher level
@@ -97,9 +97,9 @@ private:
   // connect 3 nodes in a line
   //static void connect3AtLevel(SNode *a, SNode *b, SNode *c, int level);
 
-  SNode *containsSNode(int data) const;
+  //SNode *containsSNode(int data) const;
 
-  vector<SNode *> getBeforeNodes(int data) const;
+  //vector<SNode *> getBeforeNodes(int data) const;
 
 public:
   // default SkipList has only 1 level, just one doubly-linked list
@@ -130,7 +130,7 @@ public:
   bool remove(int data);
 
   // return true if found in SkipList
-  bool contains(int data) const;
+  bool contains(int data) ;
 };
 
 #endif // ASS4_SKIPLIST_H

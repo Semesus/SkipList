@@ -80,14 +80,13 @@ bool SkipList::add(int value) {
     // pointer to beginning of list
     SNode* curr = frontGuards_[0]->next_;
     // create new node to insert
-    SNode* newNode = new SNode(value);
+    auto* newNode = new SNode(value);
     // iterate thru list until greater value found
     while(curr->value_ < value) {
         curr = curr->next_;
     }
     // Add node into list
     addBefore(newNode, curr);
-
     return true;
 }
 
@@ -116,14 +115,17 @@ bool SkipList::remove(int data) {
 
 // Given a SNode, place it before the given NextNode
 void SkipList::addBefore(SNode* newNode, SNode* nextNode) {
-  // Link next to node in front
-  newNode->next_ = nextNode;
-  // Link prev to node behind
-  newNode->prev_ = nextNode->prev_;
-  // Link node in back to new node
-  nextNode->prev_->next_ = newNode;
-  // Link node in front to new node
-  nextNode->prev_ = newNode;
+    assert(newNode != nullptr && nextNode != nullptr && newNode->value_ < nextNode->value_);
+    // Link next to node in front
+    newNode->next_ = nextNode;
+    // Link prev to node behind
+    newNode->prev_ = nextNode->prev_;
+    // Link node in back to new node
+    nextNode->prev_->next_ = newNode;
+    // Link node in front to new node
+    nextNode->prev_ = newNode;
+    assert(newNode->next_ == nextNode && nextNode->prev_ == newNode);
+    assert(newNode->prev_ != nullptr && newNode->prev_->value_ < newNode->value_);
 }
 
 // get the node that would be before this data
@@ -143,8 +145,22 @@ void SkipList::addBefore(SNode* newNode, SNode* nextNode) {
 // Returns true if the value exists in the SkipList.
 // Returns false otherwise
 
-bool SkipList::contains(int data) const {
-    return true;
+bool SkipList::contains(int data) {
+    SNode* curr = frontGuards_[maxLevel_ - 1];
+    while(curr != nullptr) {
+        if(curr->next_->value_ < data) {
+            curr = curr->next_;
+        } else if(curr->next_->value_ == data) {
+            return true;
+        } // else if(curr->next_->value_ > data {
+                //curr = curr->down_;
+        // }
+        else {
+            // redundant?
+            return false;
+        }
+    }
+    return false;
 }
 
 

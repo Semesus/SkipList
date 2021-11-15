@@ -8,6 +8,7 @@ using namespace std;
 void test() {
     // setting seed for easy testing
     srand(10000);
+    cout << boolalpha;
     SkipList skp(1, 80);
     cout << skp << endl;
     skp.add(6);
@@ -15,9 +16,13 @@ void test() {
     skp.add(3);
     cout << skp << endl;
     skp.add(10);
+    cout << "6 ? " << skp.contains(6) << endl;
     cout << skp << endl;
     skp.remove(6);
     cout << skp << endl;
+    cout << "3 ? " << skp.contains(3) << endl;
+    cout << "6 ? " << skp.contains(6) << endl;
+    bool result;
 }
 
 void test1() {
@@ -44,7 +49,7 @@ void test1() {
 
 int main() {
     test();
-  //test1();
+    //test1();
 
   cout << "Done." << endl;
   return 0;
