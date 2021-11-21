@@ -9,16 +9,17 @@ void test() {
     // setting seed for easy testing
     srand(10000);
     cout << boolalpha;
-    SkipList skp(4, 90);
+    SkipList skp(6, 90);
     cout << skp << endl;
     skp.add(6);
     cout << skp << endl;
     skp.add(3);
     cout << skp << endl;
     skp.add(10);
+    skp.add(3);
     //cout << "6 ? " << skp.contains(6) << endl;
     cout << skp << endl;
-    //skp.remove(6);
+    skp.remove(3);
     cout << skp << endl;
     //cout << "3 ? " << skp.contains(3) << endl;
     //cout << "6 ? " << skp.contains(6) << endl;
