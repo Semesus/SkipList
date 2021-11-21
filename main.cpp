@@ -1,7 +1,7 @@
 #include <cassert>
 #include <iostream>
 
-#include "skiplist.h"
+#include "SkipList.h"
 
 using namespace std;
 
@@ -9,7 +9,7 @@ void test() {
     // setting seed for easy testing
     srand(10000);
     cout << boolalpha;
-    SkipList skp(6, 90);
+    SkipList skp(5, 90);
     cout << skp << endl;
     skp.add(6);
     cout << skp << endl;

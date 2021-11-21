@@ -6,7 +6,7 @@
 #include <cstdlib>
 #include <iostream>
 
-#include "skiplist.h"
+#include "SkipList.h"
 
 using namespace std;
 
@@ -60,10 +60,21 @@ SkipList::SkipList(int maxLevel, int probability)
 
 SkipList::~SkipList() {
     // need to delete individual nodes
+    for(int i = maxLevel_ - 1; i >= 0; i--) {
+        SNode* curr = frontGuards_[i];
+        while(curr->next_ != nullptr) {
+            SNode* prev = curr;
+            curr = curr->next_;
+            delete prev;
+        }
+        delete curr;
+    }
+    delete frontGuards_;
+    delete rearGuards_;
 }
 
 bool SkipList::shouldInsertAtHigher() const {
-  return rand() % 100 < probability_;
+    return rand() % 100 < probability_;
 }
 
 bool SkipList::add(int value) {
@@ -86,19 +97,17 @@ bool SkipList::add(int value) {
     int currLevel = 1;
     while(levelUp && (currLevel < maxLevel_ - 1)) {
         // continue checking levelUp
-        if(levelUp) { // maybe not needed?
-            curr = frontGuards_[currLevel]->next_;
-            while(curr->value_ < value) {
-                curr = curr->next_;
-            }
-            auto* levelUpNode = new SNode(value);
-            addBefore(levelUpNode, curr);
-            // link up/down pointers
-            newNode->up_ = levelUpNode;
-            levelUpNode->down_ = newNode;
-            currLevel++;
-            levelUp = shouldInsertAtHigher();
+        curr = frontGuards_[currLevel]->next_;
+        while(curr->value_ < value) {
+            curr = curr->next_;
         }
+        auto* levelUpNode = new SNode(value);
+        addBefore(levelUpNode, curr);
+        // link up/down pointers
+        newNode->up_ = levelUpNode;
+        levelUpNode->down_ = newNode;
+        currLevel++;
+        levelUp = shouldInsertAtHigher();
     }
     return true;
 }
@@ -128,6 +137,26 @@ bool SkipList::remove(int data) {
     return true;
 }
 
+// Checks to see whether or not a data value exists in the list
+// Returns true if the value exists in the SkipList.
+// Returns false otherwise
+bool SkipList::contains(int data) const {
+    SNode* curr = frontGuards_[maxLevel_ - 1];
+    while(curr != nullptr) {
+        if(curr->next_->value_ < data) {
+            curr = curr->next_;
+        } else if(curr->next_->value_ == data) {
+            return true;
+        } else if(curr->next_->value_ > data) {
+            curr = curr->down_;
+        }
+        else {
+            // redundant?
+            return false;
+        }
+    }
+    return false;
+}
 // Given a SNode, place it before the given NextNode
 void SkipList::addBefore(SNode* newNode, SNode* nextNode) {
     assert(newNode != nullptr && nextNode != nullptr && newNode->value_ < nextNode->value_);
@@ -143,24 +172,3 @@ void SkipList::addBefore(SNode* newNode, SNode* nextNode) {
     assert(newNode->prev_ != nullptr && newNode->prev_->value_ < newNode->value_);
 }
 
-// Checks to see whether or not a data value exists in the list
-// Returns true if the value exists in the SkipList.
-// Returns false otherwise
-
-bool SkipList::contains(int data) const {
-    SNode* curr = frontGuards_[maxLevel_ - 1];
-    while(curr != nullptr) {
-        if(curr->next_->value_ < data) {
-            curr = curr->next_;
-        } else if(curr->next_->value_ == data) {
-            return true;
-        } else if(curr->next_->value_ > data) {
-                curr = curr->down_;
-        }
-        else {
-            // redundant?
-            return false;
-        }
-    }
-    return false;
-}

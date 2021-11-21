@@ -27,7 +27,6 @@
 using namespace std;
 
 // only SkipList class can create SNode objects
-
 class SkipList;
 
 class SNode {
@@ -59,7 +58,6 @@ class SkipList {
     friend ostream &operator<<(ostream &out, const SkipList &skip);
 
 private:
-
     // maximum number of levels
     int maxLevel_ = 1;
 
