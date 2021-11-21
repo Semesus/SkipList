@@ -69,8 +69,8 @@ SkipList::~SkipList() {
         }
         delete curr;
     }
-    delete frontGuards_;
-    delete rearGuards_;
+    delete[] frontGuards_;
+    delete[] rearGuards_;
 }
 
 bool SkipList::shouldInsertAtHigher() const {
@@ -80,6 +80,7 @@ bool SkipList::shouldInsertAtHigher() const {
 bool SkipList::add(int value) {
     // check if value already in list
     if(contains(value)) {
+        cout << "Duplicates not allowed: " << value << endl;
         return false;
     }
     // pointer to beginning of list
@@ -114,6 +115,7 @@ bool SkipList::add(int value) {
 
 bool SkipList::remove(int data) {
     if(!(contains(data))) {
+        cout << "Value not contained in SkipList: " << data << endl;
         return false;
     }
     for(int i = maxLevel_ - 1; i >= 0; i--) {
@@ -149,10 +151,6 @@ bool SkipList::contains(int data) const {
             return true;
         } else if(curr->next_->value_ > data) {
             curr = curr->down_;
-        }
-        else {
-            // redundant?
-            return false;
         }
     }
     return false;
